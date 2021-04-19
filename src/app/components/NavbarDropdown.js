@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 import {
   Dropdown,
   DropdownToggle,
@@ -8,12 +9,13 @@ import {
 } from "reactstrap";
 const NavSignUp = (props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [login, setLogin] = useState("guest");
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-
-  const usrname = () => {
-    return <span>Username need to edit</span>;
-  };
+  // const [user, setUser] = useState({ props });
+  // useEffect(() => {
+  //   var username = JSON.parse(localStorage.getItem("user")).username;
+  //   setLogin(username);
+  // });
   return (
     <div className="mr-5">
       <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -29,7 +31,7 @@ const NavSignUp = (props) => {
               <i className="fas fa-user fa-2x"></i>
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header>{usrname()}</DropdownItem>
+              <DropdownItem header>{login}</DropdownItem>
               <DropdownItem>
                 <NavLink to={"/home"} className="nav-link">
                   <i className="fas fa-user-cog"></i> Home

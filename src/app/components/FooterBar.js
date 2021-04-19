@@ -5,23 +5,33 @@ import "../Styles/FooterBar.css";
 const FooterBar = () => {
   return (
     <footer>
-      <div class="footerBar">
-        <div class="row">
-          <Link to="/">
-            <i class="fa fa-facebook text-primary"></i>
-          </Link>
-          <Link to="/">
-            <i class="fa fa-instagram"></i>
-          </Link>
-          <Link to="/">
-            <i class="fa fa-youtube"></i>
-          </Link>
-          <Link to="/">
-            <i class="fa fa-twitter"></i>
-          </Link>
+      <div className="footerBar">
+        <div className="row">
+          <ul>
+            <li>
+              <Link to="/">
+                <i className="fab fa-facebook"></i>
+              </Link>
+            </li>
+            <li>
+              <Link to="/">
+                <i className="fab fa-instagram"></i>
+              </Link>
+            </li>
+            <li>
+              <Link to="/">
+                <i className="fab fa-youtube"></i>
+              </Link>
+            </li>
+            <li>
+              <Link to="/">
+                <i className="fab fa-twitter"></i>
+              </Link>
+            </li>
+          </ul>
         </div>
 
-        <div class="row">
+        <div className="row">
           <ul>
             <li>
               <Link to="/">Contact us </Link>
@@ -33,15 +43,15 @@ const FooterBar = () => {
               <Link to="/">Privacy Policy </Link>
             </li>
             <li>
-              <Link to="/">Terms & Conditions </Link>
+              <Link to="/termCondition">Terms & Conditions </Link>
             </li>
             <li>
-              <Link to="/">Career </Link>
+              <Link to="/career">Career </Link>
             </li>
           </ul>
         </div>
 
-        <div class="row">
+        <div className="row">
           STARTOFF Copyright © 2021 StartOff - All rights reserved || Designed
           By: Naman
         </div>

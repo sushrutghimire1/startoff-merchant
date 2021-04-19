@@ -1,112 +1,45 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
+import axios from "axios";
 
 import "../Styles/signIn.css";
-
-import Authentication from "../services/AuthenticationService";
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
-      email: "",
       password: "",
       repassword: "",
-      phone: "",
-      dob: "",
-      city: "",
-      country: "",
       role: "consumer",
+      email: "",
       check: false,
     };
   }
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
     if (this.state.password === this.state.repassword && this.state.check) {
-      console.log("form submitted, redirect to");
-      Authentication.register(
-        this.state.firstname,
-        this.state.lastname,
-        this.state.username,
-        this.state.email,
-        this.state.password
-      ).then(
-        (response) => {
-          this.setState({
-            message: response.data.message,
-            successful: true,
-          });
-        },
-        (error) => {
-          console.log("Fail! Error = " + error.toString());
-
-          this.setState({
-            successful: false,
-            message: error.toString(),
-          });
-        }
-      );
+      await axios
+        .post("http://localhost:4000/auth/signUp", {
+          username: this.state.username,
+          password: this.state.password,
+          role: this.state.role,
+          email: this.state.email,
+        })
+        .then((res) => {
+          if (res.data.success) {
+            localStorage.setItem("user", JSON.stringify(res.data));
+            this.props.history.push("/fillDetails");
+          }
+        });
     } else {
       console.log("error in form");
     }
   };
   changeHandler = (e) => {
-    switch (e.target.name) {
-      case "username":
-        this.setState({
-          username: e.target.value,
-        });
-        break;
-      case "country":
-        this.setState({
-          country: e.target.value,
-        });
-        break;
-      case "password":
-        this.setState({
-          password: e.target.value,
-        });
-        break;
-      case "repassword":
-        this.setState({
-          repassword: e.target.value,
-        });
-        break;
-      case "phone":
-        this.setState({
-          phone: e.target.value,
-        });
-        break;
-      case "dob":
-        this.setState({
-          dob: e.target.value,
-        });
-        break;
-      case "city":
-        this.setState({
-          city: e.target.value,
-        });
-        break;
-      case "role":
-        this.setState({
-          role: e.target.value,
-        });
-        break;
-      case "email":
-        this.setState({
-          email: e.target.value,
-        });
-        break;
-      case "check":
-        this.setState({
-          check: !this.state.check,
-        });
-        break;
-      default:
-        break;
-    }
+    let nam = e.target.name;
+    let val = e.target.value;
+    this.setState({ [nam]: val });
   };
   handleClick = (e) => {
     e.preventDefault();
@@ -135,7 +68,7 @@ class SignUp extends Component {
               <div className="col-lg-12 login-form">
                 <div className="col-lg-12 login-form">
                   {/* form starting here */}
-                  <form className="row m-2 px-5" onSubmit={this.handleSubmit}>
+                  <form className="row m-2 px-5">
                     <div className="col-md-6 form-group">
                       <label className="form-control-label">
                         <i className="fa fa-user fa-2x"></i>
@@ -151,11 +84,11 @@ class SignUp extends Component {
                     <div className="col-md-6 form-group">
                       <label className="form-control-label">
                         <i className="fa fa-user fa-2x"></i>
-                        <span className="h6">EMAIL</span>
+                        <span className="h6">Email</span>
                       </label>
                       <input
-                        type="email"
-                        className="username form-control "
+                        type="text"
+                        className="username form-control"
                         name="email"
                         onChange={this.changeHandler}
                       />
@@ -184,54 +117,6 @@ class SignUp extends Component {
                         onChange={this.changeHandler}
                       />
                     </div>
-                    <div className="col-md-6 form-group">
-                      <label className="form-control-label">
-                        <i className="fa fa-user fa-2x"></i>
-                        <span className="h6">PHONE</span>
-                      </label>
-                      <input
-                        type="tel"
-                        className="username form-control "
-                        name="phone"
-                        onChange={this.changeHandler}
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label className="form-control-label">
-                        <i className="fa fa-user fa-2x"></i>
-                        <span className="h6">Date of Birth</span>
-                      </label>
-                      <input
-                        type="date"
-                        className="username form-control "
-                        name="dob"
-                        onChange={this.changeHandler}
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label className="form-control-label">
-                        <i className="fa fa-user fa-2x"></i>
-                        <span className="h6">CITY</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="username form-control "
-                        name="city"
-                        onChange={this.changeHandler}
-                      />
-                    </div>
-                    <div className="col-md-6 form-group">
-                      <label className="form-control-label">
-                        <i className="fa fa-user fa-2x"></i>
-                        <span className="h6">COUNTRY</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="username form-control "
-                        name="country"
-                        onChange={this.changeHandler}
-                      />
-                    </div>
                     <div className="row form-group">
                       <div className="col-sm-4">
                         <input
@@ -240,7 +125,6 @@ class SignUp extends Component {
                           name="role"
                           id="role1"
                           value="consumer"
-                          defaultChecked
                           onChange={this.changeHandler}
                         />
                         <label className="form-control-label" htmlFor="role1">
@@ -254,6 +138,7 @@ class SignUp extends Component {
                           name="role"
                           id="role2"
                           value="client"
+                          defaultChecked
                           onChange={this.changeHandler}
                         />
                         <label className="form-control-label" htmlFor="role2">
@@ -293,6 +178,7 @@ class SignUp extends Component {
                           type="submit"
                           value="SignUp"
                           className="btn btn-success align-self-center form-control"
+                          onClick={this.handleSubmit}
                         />
                       </center>
                     </div>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
-import AuthenticationService from "../services/AuthenticationService";
+import axios from "axios";
 
 import "../Styles/signIn.css";
 
@@ -23,19 +23,24 @@ class Signin extends Component {
 
   doLogin = async (event) => {
     event.preventDefault();
-
-    AuthenticationService.signin(this.state.username, this.state.password).then(
-      () => {
-        this.props.history.push("/home");
-      },
-      (error) => {
-        console.log("Login fail: error = { " + error.toString() + " }");
-        this.setState({
-          error:
-            "Can not signin successfully ! Please check username/password again",
-        });
-      }
-    );
+    var usr = await this.state.username;
+    var pass = await this.state.password;
+    console.log(usr + " " + pass);
+    await axios
+      .post("http://localhost:4000/auth/login", {
+        username: usr,
+        password: pass,
+      })
+      .then((res) => {
+        var response = res.data;
+        console.log(response);
+        if (response.login) {
+          localStorage.setItem("user", JSON.stringify(response));
+          this.props.history.push("/home");
+        } else {
+          this.setState({ error: "Invalid Username and password" });
+        }
+      });
   };
 
   render() {
@@ -92,7 +97,8 @@ class Signin extends Component {
                     <center>
                       <button
                         type="submit"
-                        className="btn form-control btn-primary align-self-center"
+                        className="btn form-control btn-success align-self-center"
+                        onClick={this.doLogin}
                       >
                         LOGIN
                       </button>
@@ -100,6 +106,15 @@ class Signin extends Component {
                       {this.state.error && (
                         <div className="bg-danger mt-2">{this.state.error}</div>
                       )}
+                      <button
+                        type="submit"
+                        className="btn form-control btn-primary align-self-center mt-3"
+                        onClick={() => {
+                          this.props.history.push("/signup");
+                        }}
+                      >
+                        SIGNUP
+                      </button>
                     </center>
                   </div>
                   <div className="form-group mb-5">
