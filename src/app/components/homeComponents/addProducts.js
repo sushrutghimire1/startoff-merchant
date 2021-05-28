@@ -18,7 +18,6 @@ class addProducts extends Component {
       costprice: 0,
       stock: 0,
       profit: 0,
-      pincode: 0,
       weight: 0,
     };
   }
